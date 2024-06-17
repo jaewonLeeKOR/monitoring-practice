@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  spring:
+    container_name: spring
+    image: ghcr.io/jaewonleekor/monitoring-practice:latest
+    ports:
+      - 8080:8080
+    networks:
+      monitoring_network:
+        ipv4_address: 172.28.1.7
+networks:
+  monitoring_network:
+    driver: bridge
+    internal: false
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16
+          ip_range: 172.28.1.0/24
+          gateway: 172.28.1.254
