@@ -9,3 +9,9 @@ server:
   tomcat:
     mbeanregistry:
       enabled: true
+logging:
+  config: classpath:logback-spring.xml
+spring:
+  output:
+    ansi:
+      enabled: always

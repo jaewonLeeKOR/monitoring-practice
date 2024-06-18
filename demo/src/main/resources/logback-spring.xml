@@ -1,0 +1,130 @@
+<configuration scan="true" scanPeriod="60 seconds">
+    <property name="LOG_PATH" value="./logs"/>
+
+    <property name="TOTAL_LOG_FILE_NAME" value="total"/>
+    <property name="ERROR_LOG_FILE_NAME" value="error"/>
+
+    <property name="DEFAULT_LOG_PATTERN" value="%d{yy-MM-dd}T%d{HH:mm:ss.SSS} %highlight(%+5p) %magenta(${PID:-}) --- [%t] %cyan(%logger) - %m%n"/>
+
+    <property name="INFO_LOG_PATTERN" value="%d{yy-MM-dd}T%d{HH:mm:ss.SSS} %boldGreen(%+5p) %magenta(${PID:-}) --- [%t] %cyan(%logger) - %m%n"/>
+    <property name="ERROR_LOG_PATTERN" value="%d{yy-MM-dd}T%d{HH:mm:ss.SSS} %boldRed(%+5p) %magenta(${PID:-}) --- [%t] %cyan(%logger.[%M].[%L]) - %m%n"/>
+    <property name="WARN_LOG_PATTERN" value="%d{yy-MM-dd}T%d{HH:mm:ss.SSS} %boldYellow(%+5p) %magenta(${PID:-}) --- [%t] %cyan(%logger.[%M].[%L]) - %m%n"/>
+    <property name="DEBUG_LOG_PATTERN" value="%d{yy-MM-dd}T%d{HH:mm:ss.SSS} %boldBlue(%+5p) %magenta(${PID:-}) --- [%t] %cyan(%logger.[%M].[%L]) - %m%n"/>
+    <property name="TRACE_LOG_PATTERN" value="%d{yy-MM-dd}T%d{HH:mm:ss.SSS} %gray(%+5p) %magenta(${PID:-}) --- [%t] %cyan(%logger.[%M].[%L]) - %m%n"/>
+
+    <property name="MAX_FILE_SIZE" value="10MB"/>
+    <property name="TOTAL_SIZE_CAP" value="100MB"/>
+    <property name="MAX_HISTORY" value="1000"/>
+
+
+<!--    INFO, DEBUG, WARN, ERROR, TRACE-->
+    <appender name="INFO_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <charset>utf8</charset>
+            <Pattern>${INFO_LOG_PATTERN}</Pattern>
+        </encoder>
+    </appender>
+    <appender name="ERROR_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <charset>utf8</charset>
+            <Pattern>${ERROR_LOG_PATTERN}</Pattern>
+        </encoder>
+    </appender>
+    <appender name="WARN_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>WARN</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <charset>utf8</charset>
+            <Pattern>${WARN_LOG_PATTERN}</Pattern>
+        </encoder>
+    </appender>
+    <appender name="DEBUG_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>DEBUG</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <charset>utf8</charset>
+            <Pattern>${DEBUG_LOG_PATTERN}</Pattern>
+        </encoder>
+    </appender>
+    <appender name="TRACE_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>TRACE</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <charset>utf8</charset>
+            <Pattern>${TRACE_LOG_PATTERN}</Pattern>
+        </encoder>
+    </appender>
+
+    <appender name="INFO_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/${TOTAL_LOG_FILE_NAME}.log</file>
+        <append>true</append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/%d{yyyy-MM, aux}/${TOTAL_LOG_FILE_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
+            <totalSizeCap>${TOTAL_SIZE_CAP}</totalSizeCap>
+            <maxHistory>${MAX_HISTORY}</maxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <charset>utf8</charset>
+            <pattern>${DEFAULT_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+    <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <file>${LOG_PATH}/${ERROR_LOG_FILE_NAME}.log</file>
+        <append>true</append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/%d{yyyy-MM, aux}/${ERROR_LOG_FILE_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
+            <totalSizeCap>${TOTAL_SIZE_CAP}</totalSizeCap>
+            <maxHistory>${MAX_HISTORY}</maxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <charset>utf8</charset>
+            <pattern>${ERROR_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="monitoring.demo" level="TRACE" additivity="false">
+        <appender-ref ref="INFO_CONSOLE"/>
+        <appender-ref ref="ERROR_CONSOLE"/>
+        <appender-ref ref="WARN_CONSOLE"/>
+        <appender-ref ref="DEBUG_CONSOLE"/>
+        <appender-ref ref="TRACE_CONSOLE"/>
+        <appender-ref ref="INFO_FILE"/>
+        <appender-ref ref="ERROR_FILE"/>
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="INFO_CONSOLE"/>
+        <appender-ref ref="ERROR_CONSOLE"/>
+        <appender-ref ref="WARN_CONSOLE"/>
+        <appender-ref ref="DEBUG_CONSOLE"/>
+        <appender-ref ref="TRACE_CONSOLE"/>
+        <appender-ref ref="INFO_FILE"/>
+        <appender-ref ref="ERROR_FILE"/>
+    </root>
+</configuration>
