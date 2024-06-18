@@ -9,6 +9,8 @@ services:
     networks:
       monitoring_network:
         ipv4_address: 172.28.1.7
+    volumes:
+      - /home/ubuntu/logs:/app/logs
 networks:
   monitoring_network:
     driver: bridge
