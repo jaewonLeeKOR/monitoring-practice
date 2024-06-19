@@ -23,4 +23,8 @@ public class DemoService {
     public PostDemoResponse postDemo(PostDemoRequest request) {
         return new PostDemoResponse(request.getMessage());
     }
+
+    public String getError() throws RuntimeException {
+        throw new RuntimeException("error");
+    }
 }

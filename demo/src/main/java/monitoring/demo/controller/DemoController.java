@@ -31,7 +31,10 @@ public class DemoController {
     }
 
     @GetMapping("/error")
-    public String GetError() throws Exception {
-        throw new Exception("error");
+    public String GetError() {
+        try {
+            return demoService.getError();
+        } catch(RuntimeException e) {}
+        return "error handled!!";
     }
 }

@@ -3,6 +3,7 @@
 
     <property name="TOTAL_LOG_FILE_NAME" value="total"/>
     <property name="ERROR_LOG_FILE_NAME" value="error"/>
+    <property name="TRACE_LOG_FILE_NAME" value="trace"/>
 
     <property name="DEFAULT_LOG_PATTERN" value="%d{yy-MM-dd}T%d{HH:mm:ss.SSS} %highlight(%+5p) %magenta(${PID:-}) --- [%t] %cyan(%logger) - %m%n"/>
 
@@ -74,7 +75,7 @@
         </encoder>
     </appender>
 
-    <appender name="INFO_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="TOTAL_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_PATH}/${TOTAL_LOG_FILE_NAME}.log</file>
         <append>true</append>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -107,15 +108,39 @@
             <pattern>${ERROR_LOG_PATTERN}</pattern>
         </encoder>
     </appender>
+    <appender name="TRACE_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>TRACE</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <file>${LOG_PATH}/${TRACE_LOG_FILE_NAME}.log</file>
+        <append>true</append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/%d{yyyy-MM, aux}/${TRACE_LOG_FILE_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
+            <totalSizeCap>${TOTAL_SIZE_CAP}</totalSizeCap>
+            <maxHistory>${MAX_HISTORY}</maxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <charset>utf8</charset>
+            <pattern>${TRACE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
 
-    <logger name="monitoring.demo" level="TRACE" additivity="false">
+<!--    <logger name="monitoring.demo" level="TRACE" additivity="false">-->
+<!--        <appender-ref ref="TOTAL_FILE"/>-->
+<!--    </logger>-->
+
+    <logger name="monitoring.demo.config.log" level="TRACE" additivity="false">
         <appender-ref ref="INFO_CONSOLE"/>
         <appender-ref ref="ERROR_CONSOLE"/>
         <appender-ref ref="WARN_CONSOLE"/>
         <appender-ref ref="DEBUG_CONSOLE"/>
         <appender-ref ref="TRACE_CONSOLE"/>
-        <appender-ref ref="INFO_FILE"/>
+        <appender-ref ref="TOTAL_FILE"/>
         <appender-ref ref="ERROR_FILE"/>
+        <appender-ref ref="TRACE_FILE"/>
     </logger>
 
     <root level="INFO">
@@ -124,7 +149,8 @@
         <appender-ref ref="WARN_CONSOLE"/>
         <appender-ref ref="DEBUG_CONSOLE"/>
         <appender-ref ref="TRACE_CONSOLE"/>
-        <appender-ref ref="INFO_FILE"/>
+        <appender-ref ref="TOTAL_FILE"/>
         <appender-ref ref="ERROR_FILE"/>
+        <appender-ref ref="TRACE_FILE"/>
     </root>
 </configuration>
