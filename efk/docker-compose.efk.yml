@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  elasticsearch:
+    container_name: elasticsearch
+    image: elasticsearch:7.17.22
+    ports:
+      - 9200:9200
+      - 9300:9300
+    environment:
+      - discovery.type=single-node
+    networks:
+      efk_network:
+        ipv4_address: 172.30.1.7
+    volumes:
+      - /home/ubuntu/logs:/app/logs
+  fluentd:
+    container_name: fluentd
+    image: ghcr.io/jaewonleekor/monitoring-practice-fluent:latest
+    ports:
+      - 24224:24224
+      - 24224:24224/udp
+    networks:
+      efk_network:
+        ipv4_address: 172.30.1.8
+    volumes:
+      - /home/ubuntu/logs:/fluentd/logs
+      - /home/ubuntu/efk/fluentd/etc:/fluentd/etc
+  kibana:
+    container_name: kibana
+    image: kibana:7.17.22
+    ports:
+      - 5601:5601
+    networks:
+      efk_network:
+        ipv4_address: 172.30.1.9
+networks:
+  efk_network:
+    driver: bridge
+    internal: false
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.30.0.0/16
+          ip_range: 172.30.1.0/24
+          gateway: 172.30.1.254
