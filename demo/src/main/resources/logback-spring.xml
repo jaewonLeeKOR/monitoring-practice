@@ -5,13 +5,13 @@
     <property name="ERROR_LOG_FILE_NAME" value="error"/>
     <property name="TRACE_LOG_FILE_NAME" value="trace"/>
 
-    <property name="DEFAULT_LOG_PATTERN" value="%d{yy-MM-dd}T%d{HH:mm:ss.SSS} %highlight(%+5p) %magenta(${PID:-}) --- [%t] %cyan(%logger) - %m%n"/>
+    <property name="DEFAULT_LOG_PATTERN" value="%d{yy-MM-dd}T%d{HH:mm:ss.SSS} %highlight(%+5p) %magenta(${PID:-}) --- [%t] [traceId:%X{traceId:-}] [spanId:%X{spanId:-}] %cyan(%logger) - %m%n"/>
 
-    <property name="INFO_LOG_PATTERN" value="%d{yy-MM-dd}T%d{HH:mm:ss.SSS} %boldGreen(%+5p) %magenta(${PID:-}) --- [%t] %cyan(%logger) - %m%n"/>
-    <property name="ERROR_LOG_PATTERN" value="%d{yy-MM-dd}T%d{HH:mm:ss.SSS} %boldRed(%+5p) %magenta(${PID:-}) --- [%t] %cyan(%logger.[%M].[%L]) - %m%n"/>
-    <property name="WARN_LOG_PATTERN" value="%d{yy-MM-dd}T%d{HH:mm:ss.SSS} %boldYellow(%+5p) %magenta(${PID:-}) --- [%t] %cyan(%logger.[%M].[%L]) - %m%n"/>
-    <property name="DEBUG_LOG_PATTERN" value="%d{yy-MM-dd}T%d{HH:mm:ss.SSS} %boldBlue(%+5p) %magenta(${PID:-}) --- [%t] %cyan(%logger.[%M].[%L]) - %m%n"/>
-    <property name="TRACE_LOG_PATTERN" value="%d{yy-MM-dd}T%d{HH:mm:ss.SSS} %gray(%+5p) %magenta(${PID:-}) --- [%t] %cyan(%logger.[%M].[%L]) - %m%n"/>
+    <property name="INFO_LOG_PATTERN" value="%d{yy-MM-dd}T%d{HH:mm:ss.SSS} %boldGreen(%+5p) %magenta(${PID:-}) --- [%t] [traceId:%X{traceId:-}] [spanId:%X{spanId:-}] %cyan(%logger) - %m%n"/>
+    <property name="ERROR_LOG_PATTERN" value="%d{yy-MM-dd}T%d{HH:mm:ss.SSS} %boldRed(%+5p) %magenta(${PID:-}) --- [%t] [traceId:%X{traceId:-}] [spanId:%X{spanId:-}] %cyan(%logger.[%M].[%L]) - %m%n"/>
+    <property name="WARN_LOG_PATTERN" value="%d{yy-MM-dd}T%d{HH:mm:ss.SSS} %boldYellow(%+5p) %magenta(${PID:-}) --- [%t] [traceId:%X{traceId:-}] [spanId:%X{spanId:-}] %cyan(%logger.[%M].[%L]) - %m%n"/>
+    <property name="DEBUG_LOG_PATTERN" value="%d{yy-MM-dd}T%d{HH:mm:ss.SSS} %boldBlue(%+5p) %magenta(${PID:-}) --- [%t] [traceId:%X{traceId:-}] [spanId:%X{spanId:-}] %cyan(%logger.[%M].[%L]) - %m%n"/>
+    <property name="TRACE_LOG_PATTERN" value="%d{yy-MM-dd}T%d{HH:mm:ss.SSS} %gray(%+5p) %magenta(${PID:-}) --- [%t] [traceId:%X{traceId:-}] [spanId:%X{spanId:-}] %cyan(%logger.[%M].[%L]) - %m%n"/>
 
     <property name="MAX_FILE_SIZE" value="10MB"/>
     <property name="TOTAL_SIZE_CAP" value="100MB"/>

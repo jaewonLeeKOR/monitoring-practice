@@ -15,3 +15,8 @@ spring:
   output:
     ansi:
       enabled: always
+  sleuth:
+    sampler:
+      probability: 1.0
+  application:
+    name: api

@@ -29,6 +29,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-actuator:3.3.0'
 	implementation 'io.micrometer:micrometer-registry-prometheus'
 	implementation 'org.springframework.boot:spring-boot-starter-aop:3.2.5'
+	// trace id, span id
+	implementation 'org.springframework.cloud:spring-cloud-starter-sleuth:3.1.11'
 }
 
 tasks.named('test') {
