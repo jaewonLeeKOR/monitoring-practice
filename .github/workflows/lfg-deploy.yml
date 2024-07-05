@@ -1,0 +1,90 @@
+name: Deploy LFG
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  REGISTRY: ghcr.io
+  REPOSITORY: ${{ github.repository }}
+  GITHUB_ACTOR: ${{ github.actor }}
+
+jobs:
+  Deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{secrets.TOKEN_GITHUB}}
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ env.GITHUB_ACTOR }}
+          password: ${{ secrets.TOKEN_GITHUB }}
+
+      - name: Build Image
+        run: docker build --no-cache -t ghcr.io/jaewonleekor/monitoring-practice-fluent:latest -f lfg/Dockerfile-fluent-lfg .
+
+      - name: Push
+        run: docker push ghcr.io/jaewonleekor/monitoring-practice-fluent:latest
+
+      - name: Copy docker-compose.lfg.yml
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "lfg/docker-compose.lfg.yml,lfg/fluentd/etc/fluent.conf"
+          target: /home/ubuntu
+
+      - name: Check Docker
+        id: dockerChecker
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            docker --version
+            docker-compose --version
+
+      - name: Install Docker
+        if: ${{ failure() && steps.dockerChecker.conclusion == 'failure' }}
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            sudo apt-get update
+            sudo apt-get install docker.io
+            sudo ln -sf /usr/bin/docker.io /usr/local/bin/docker
+            sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+            sudo chmod +x /usr/local/bin/docker-compose
+            docker --version
+            docker-compose --version
+
+      - name: Deploy
+        if: ${{ always() }}
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /home/ubuntu
+            sudo docker login ${{ env.REGISTRY }} -u ${{ env.GITHUB_ACTOR }} -p ${{ secrets.TOKEN_GITHUB }}
+            sudo docker container stop loki fluentd grafana
+            sudo docker container rm loki fluentd grafana
+            sudo docker-compose -f lfg/docker-compose.lfg.yml -p lfg up -d
+            sudo docker image prune -a
+            sudo docker network prune -f

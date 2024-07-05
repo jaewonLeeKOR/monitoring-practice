@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  fluentd:
+    container_name: fluentd
+    image: ghcr.io/jaewonleekor/monitoring-practice-fluent:latest
+    command:
+      - "fluentd"
+      - "-v"
+      - "-p"
+      - "/fluentd/plugins"
+    environment:
+      LOKI_URL: http://172.31.1.7:3100
+      FLUENTD_CONF: fluent.conf
+    deploy:
+      mode: global
+    ports:
+      - 24224:24224
+      - 24224:24224/udp
+      - 5140:5140
+    networks:
+      lfg_network:
+        ipv4_address: 172.31.1.8
+    volumes:
+      - /home/ubuntu/lfg/fluentd/etc:/fluentd/etc
+      - /home/ubuntu/logs:/fluentd/logs
+  loki:
+    container_name: loki
+    image: grafana/loki:main
+    ports:
+      - 3100:3100
+    environment:
+      - discovery.type=single-node
+    networks:
+      lfg_network:
+        ipv4_address: 172.31.1.7
+    volumes:
+      - /home/ubuntu/lfg:/app/logs
+  grafana:
+    container_name: grafana
+    image: grafana/grafana
+    ports:
+      - 3000:3000
+    networks:
+      lfg_network:
+        ipv4_address: 172.31.1.9
+networks:
+  lfg_network:
+    driver: bridge
+    internal: false
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.31.0.0/16
+          ip_range: 172.31.1.0/24
+          gateway: 172.31.1.254
