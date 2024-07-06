@@ -24,6 +24,7 @@ services:
     volumes:
       - /home/ubuntu/lfg/fluentd/etc:/fluentd/etc
       - /home/ubuntu/logs:/fluentd/logs
+    user: root
   loki:
     container_name: loki
     image: grafana/loki:main
