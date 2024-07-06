@@ -5,7 +5,7 @@
     <property name="ERROR_LOG_FILE_NAME" value="error"/>
     <property name="TRACE_LOG_FILE_NAME" value="trace"/>
 
-    <property name="DEFAULT_LOG_PATTERN" value="%d{yy-MM-dd}T%d{HH:mm:ss.SSS} %highlight(%+5p) %magenta(${PID:-}) --- [%t] [traceId:%X{traceId:-}] [spanId:%X{spanId:-}] %cyan(%logger) - %m%n"/>
+    <property name="FILE_LOG_PATTERN" value="%d{yy-MM-dd}T%d{HH:mm:ss.SSS} %+5p ${PID:-} --- [%t] [traceId:%X{traceId:-}] [spanId:%X{spanId:-}] %logger - %m%n"/>
 
     <property name="INFO_LOG_PATTERN" value="%d{yy-MM-dd}T%d{HH:mm:ss.SSS} %boldGreen(%+5p) %magenta(${PID:-}) --- [%t] [traceId:%X{traceId:-}] [spanId:%X{spanId:-}] %cyan(%logger) - %m%n"/>
     <property name="ERROR_LOG_PATTERN" value="%d{yy-MM-dd}T%d{HH:mm:ss.SSS} %boldRed(%+5p) %magenta(${PID:-}) --- [%t] [traceId:%X{traceId:-}] [spanId:%X{spanId:-}] %cyan(%logger.[%M].[%L]) - %m%n"/>
@@ -86,7 +86,7 @@
         </rollingPolicy>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <charset>utf8</charset>
-            <pattern>${DEFAULT_LOG_PATTERN}</pattern>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
         </encoder>
     </appender>
     <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
