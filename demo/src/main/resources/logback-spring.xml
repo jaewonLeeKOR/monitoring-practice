@@ -1,11 +1,13 @@
 <configuration scan="true" scanPeriod="60 seconds">
     <property name="LOG_PATH" value="./logs"/>
 
-    <property name="TOTAL_LOG_FILE_NAME" value="total"/>
+    <property name="INFO_LOG_FILE_NAME" value="info"/>
     <property name="ERROR_LOG_FILE_NAME" value="error"/>
+    <property name="WARN_LOG_FILE_NAME" value="warn"/>
+    <property name="DEBUG_LOG_FILE_NAME" value="debug"/>
     <property name="TRACE_LOG_FILE_NAME" value="trace"/>
 
-    <property name="FILE_LOG_PATTERN" value="%d{yy-MM-dd}T%d{HH:mm:ss.SSS} %+5p ${PID:-} --- [%t] [traceId:%X{traceId:-}] [spanId:%X{spanId:-}] %logger - %m%n"/>
+    <property name="DEFAULT_LOG_PATTERN" value="%d{yy-MM-dd}T%d{HH:mm:ss.SSS} %highlight(%+5p) %magenta(${PID:-}) --- [%t] [traceId:%X{traceId:-}] [spanId:%X{spanId:-}] %cyan(%logger) - %m%n"/>
 
     <property name="INFO_LOG_PATTERN" value="%d{yy-MM-dd}T%d{HH:mm:ss.SSS} %boldGreen(%+5p) %magenta(${PID:-}) --- [%t] [traceId:%X{traceId:-}] [spanId:%X{spanId:-}] %cyan(%logger) - %m%n"/>
     <property name="ERROR_LOG_PATTERN" value="%d{yy-MM-dd}T%d{HH:mm:ss.SSS} %boldRed(%+5p) %magenta(${PID:-}) --- [%t] [traceId:%X{traceId:-}] [spanId:%X{spanId:-}] %cyan(%logger.[%M].[%L]) - %m%n"/>
@@ -75,18 +77,37 @@
         </encoder>
     </appender>
 
-    <appender name="TOTAL_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_PATH}/${TOTAL_LOG_FILE_NAME}.log</file>
+<!--    <appender name="TOTAL_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+<!--        <file>${LOG_PATH}/${TOTAL_LOG_FILE_NAME}.log</file>-->
+<!--        <append>true</append>-->
+<!--        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
+<!--            <fileNamePattern>${LOG_PATH}/%d{yyyy-MM, aux}/${TOTAL_LOG_FILE_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern>-->
+<!--            <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>-->
+<!--            <totalSizeCap>${TOTAL_SIZE_CAP}</totalSizeCap>-->
+<!--            <maxHistory>${MAX_HISTORY}</maxHistory>-->
+<!--        </rollingPolicy>-->
+<!--        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">-->
+<!--            <charset>utf8</charset>-->
+<!--            <pattern>${FILE_LOG_PATTERN}</pattern>-->
+<!--        </encoder>-->
+<!--    </appender>-->
+    <appender name="INFO_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <file>${LOG_PATH}/${INFO_LOG_FILE_NAME}.log</file>
         <append>true</append>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH}/%d{yyyy-MM, aux}/${TOTAL_LOG_FILE_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>${LOG_PATH}/%d{yyyy-MM, aux}/${INFO_LOG_FILE_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
             <totalSizeCap>${TOTAL_SIZE_CAP}</totalSizeCap>
             <maxHistory>${MAX_HISTORY}</maxHistory>
         </rollingPolicy>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <charset>utf8</charset>
-            <pattern>${FILE_LOG_PATTERN}</pattern>
+            <pattern>${INFO_LOG_PATTERN}</pattern>
         </encoder>
     </appender>
     <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -106,6 +127,44 @@
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <charset>utf8</charset>
             <pattern>${ERROR_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+    <appender name="WARN_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>WARN</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <file>${LOG_PATH}/${WARN_LOG_FILE_NAME}.log</file>
+        <append>true</append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/%d{yyyy-MM, aux}/${WARN_LOG_FILE_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
+            <totalSizeCap>${TOTAL_SIZE_CAP}</totalSizeCap>
+            <maxHistory>${MAX_HISTORY}</maxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <charset>utf8</charset>
+            <pattern>${WARN_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+    <appender name="DEBUG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>DEBUG</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <file>${LOG_PATH}/${DEBUG_LOG_FILE_NAME}.log</file>
+        <append>true</append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/%d{yyyy-MM, aux}/${DEBUG_LOG_FILE_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
+            <totalSizeCap>${TOTAL_SIZE_CAP}</totalSizeCap>
+            <maxHistory>${MAX_HISTORY}</maxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <charset>utf8</charset>
+            <pattern>${DEBUG_LOG_PATTERN}</pattern>
         </encoder>
     </appender>
     <appender name="TRACE_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -138,8 +197,10 @@
         <appender-ref ref="WARN_CONSOLE"/>
         <appender-ref ref="DEBUG_CONSOLE"/>
         <appender-ref ref="TRACE_CONSOLE"/>
-        <appender-ref ref="TOTAL_FILE"/>
+        <appender-ref ref="INFO_FILE"/>
         <appender-ref ref="ERROR_FILE"/>
+        <appender-ref ref="WARN_FILE"/>
+        <appender-ref ref="DEBUG_FILE"/>
         <appender-ref ref="TRACE_FILE"/>
     </logger>
 
@@ -149,8 +210,10 @@
         <appender-ref ref="WARN_CONSOLE"/>
         <appender-ref ref="DEBUG_CONSOLE"/>
         <appender-ref ref="TRACE_CONSOLE"/>
-        <appender-ref ref="TOTAL_FILE"/>
+        <appender-ref ref="INFO_FILE"/>
         <appender-ref ref="ERROR_FILE"/>
+        <appender-ref ref="WARN_FILE"/>
+        <appender-ref ref="DEBUG_FILE"/>
         <appender-ref ref="TRACE_FILE"/>
     </root>
 </configuration>
