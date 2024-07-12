@@ -8,7 +8,6 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StopWatch;
 
 import java.lang.reflect.Method;
 
@@ -16,42 +15,23 @@ import java.lang.reflect.Method;
 @Aspect
 @Component
 public class SimpleLogAop {
-    private StopWatch stopWatch;
-    @AfterThrowing(pointcut = "execution(* monitoring.demo..*(..))", throwing = "exception")
+    @AfterThrowing(pointcut = "within(monitoring.demo..*)", throwing = "exception")
     public void afterThrowingLog(JoinPoint joinPoint, Exception exception) {
         Method method = getMethod(joinPoint);
-        log.trace(String.format("AFTER THROWING[%d] %s.%s => %s", Thread.currentThread().getId(), joinPoint.getTarget().getClass().getSimpleName(), method.getName(), exception.getMessage()));
+        log.debug(String.format("AFTER THROWING[%d] %s.%s => %s", Thread.currentThread().getId(), joinPoint.getTarget().getClass().getSimpleName(), method.getName(), exception.getMessage()));
     }
 
-    @Around("execution(* monitoring.demo.controller..*(..))")
+    @Around("within(monitoring.demo.service..*) || @annotation(CustomLogAnnotation)")
     public Object controllerLog(ProceedingJoinPoint joinPoint) throws Throwable {
         Method method = getMethod(joinPoint);
         StringBuilder parameters = new StringBuilder();
-        stopWatch = new StopWatch();
-        parameters.append(String.format("BEFORE[%d](%f) %s.%s => ", Thread.currentThread().getId(), stopWatch.getTotalTimeSeconds(), joinPoint.getTarget().getClass().getSimpleName(), method.getName()));
-        stopWatch.start();
+        parameters.append(String.format("BEFORE[%d] %s.%s => ", Thread.currentThread().getId(), joinPoint.getTarget().getClass().getSimpleName(), method.getName()));
         for (Object arg : joinPoint.getArgs()) {
             parameters.append(arg).append(", ");
         }
-        log.trace(parameters.toString());
+        log.debug(parameters.toString());
         Object returnObj = joinPoint.proceed();
-        stopWatch.stop();
-        log.trace(String.format("AFTER[%d](%f) %s.%s => %s", Thread.currentThread().getId(), stopWatch.getTotalTimeSeconds(), joinPoint.getTarget().getClass().getSimpleName(), method.getName(), returnObj));
-        stopWatch = null;
-        return returnObj;
-    }
-
-    @Around("execution(* monitoring.demo.service..*(..))")
-    public Object serviceLog(ProceedingJoinPoint joinPoint) throws Throwable {
-        Method method = getMethod(joinPoint);
-        StringBuilder parameters = new StringBuilder();
-        parameters.append(String.format("BEFORE[%d](%f) %s.%s => ", Thread.currentThread().getId(), stopWatch.getTotalTimeSeconds(), joinPoint.getTarget().getClass().getSimpleName(), method.getName()));
-        for (Object arg : joinPoint.getArgs()) {
-            parameters.append(arg).append(", ");
-        }
-        log.trace(parameters.toString());
-        Object returnObj = joinPoint.proceed();
-        log.trace(String.format("AFTER[%d](%f) %s.%s => %s", Thread.currentThread().getId(), stopWatch.getTotalTimeSeconds(), joinPoint.getTarget().getClass().getSimpleName(), method.getName(), returnObj));
+        log.debug(String.format("AFTER[%d] %s.%s => %s", Thread.currentThread().getId(), joinPoint.getTarget().getClass().getSimpleName(), method.getName(), returnObj));
         return returnObj;
     }
 

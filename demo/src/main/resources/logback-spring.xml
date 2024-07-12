@@ -7,7 +7,7 @@
     <property name="DEBUG_LOG_FILE_NAME" value="debug"/>
     <property name="TRACE_LOG_FILE_NAME" value="trace"/>
 
-    <property name="DEFAULT_LOG_PATTERN" value="%d{yy-MM-dd}T%d{HH:mm:ss.SSS} %highlight(%+5p) %magenta(${PID:-}) --- [%t] [traceId:%X{traceId:-}] [spanId:%X{spanId:-}] %cyan(%logger) - %m%n"/>
+    <property name="DEFAULT_LOG_PATTERN" value="%d{yy-MM-dd}T%d{HH:mm:ss.SSS} %highlight(%+5p) %magenta(${PID:-}) --- [%t] [traceId:%X{traceId:-}] [spanId:%X{spanId:-}] %cyan(%logger.[%M].[%L]) - %m%n"/>
 
     <property name="INFO_LOG_PATTERN" value="%d{yy-MM-dd}T%d{HH:mm:ss.SSS} %boldGreen(%+5p) %magenta(${PID:-}) --- [%t] [traceId:%X{traceId:-}] [spanId:%X{spanId:-}] %cyan(%logger) - %m%n"/>
     <property name="ERROR_LOG_PATTERN" value="%d{yy-MM-dd}T%d{HH:mm:ss.SSS} %boldRed(%+5p) %magenta(${PID:-}) --- [%t] [traceId:%X{traceId:-}] [spanId:%X{spanId:-}] %cyan(%logger.[%M].[%L]) - %m%n"/>
@@ -17,7 +17,7 @@
 
     <property name="MAX_FILE_SIZE" value="10MB"/>
     <property name="TOTAL_SIZE_CAP" value="100MB"/>
-    <property name="MAX_HISTORY" value="1000"/>
+    <property name="MAX_HISTORY" value="3"/>
 
 
 <!--    INFO, DEBUG, WARN, ERROR, TRACE-->
@@ -99,8 +99,8 @@
         </filter>
         <file>${LOG_PATH}/${INFO_LOG_FILE_NAME}.log</file>
         <append>true</append>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH}/%d{yyyy-MM, aux}/${INFO_LOG_FILE_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/old/${INFO_LOG_FILE_NAME}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
             <totalSizeCap>${TOTAL_SIZE_CAP}</totalSizeCap>
             <maxHistory>${MAX_HISTORY}</maxHistory>
@@ -118,8 +118,8 @@
         </filter>
         <file>${LOG_PATH}/${ERROR_LOG_FILE_NAME}.log</file>
         <append>true</append>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH}/%d{yyyy-MM, aux}/${ERROR_LOG_FILE_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/old/${ERROR_LOG_FILE_NAME}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
             <totalSizeCap>${TOTAL_SIZE_CAP}</totalSizeCap>
             <maxHistory>${MAX_HISTORY}</maxHistory>
@@ -137,8 +137,8 @@
         </filter>
         <file>${LOG_PATH}/${WARN_LOG_FILE_NAME}.log</file>
         <append>true</append>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH}/%d{yyyy-MM, aux}/${WARN_LOG_FILE_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/old/${WARN_LOG_FILE_NAME}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
             <totalSizeCap>${TOTAL_SIZE_CAP}</totalSizeCap>
             <maxHistory>${MAX_HISTORY}</maxHistory>
@@ -156,8 +156,8 @@
         </filter>
         <file>${LOG_PATH}/${DEBUG_LOG_FILE_NAME}.log</file>
         <append>true</append>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH}/%d{yyyy-MM, aux}/${DEBUG_LOG_FILE_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/old/${DEBUG_LOG_FILE_NAME}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
             <totalSizeCap>${TOTAL_SIZE_CAP}</totalSizeCap>
             <maxHistory>${MAX_HISTORY}</maxHistory>
@@ -175,8 +175,8 @@
         </filter>
         <file>${LOG_PATH}/${TRACE_LOG_FILE_NAME}.log</file>
         <append>true</append>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH}/%d{yyyy-MM, aux}/${TRACE_LOG_FILE_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/old/${TRACE_LOG_FILE_NAME}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
             <totalSizeCap>${TOTAL_SIZE_CAP}</totalSizeCap>
             <maxHistory>${MAX_HISTORY}</maxHistory>
